@@ -1,3 +1,7 @@
 Number of students in file: 9
 Number of students who did only one test: 4
 Number of students who did neither tests: 2
+Percentage of failure in test A: %44.44
+Percentage of failure in test B: %44.44
+Student with ID 1345431 got the highest mark with: 100
+Student with ID 2345566 got the lowest mark with: 60

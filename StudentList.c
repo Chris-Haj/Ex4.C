@@ -1,60 +1,59 @@
 #include "StudentList.h"
 
 StudentList *createList() {
-
-    return NULL;
+// We create a StudentList using calloc, and intialize its head to null then return the list.
+    StudentList *List = (StudentList *) calloc(1, sizeof(StudentList));
+    List->head=NULL;
+    return List;
 }
 
 void deleteList(StudentList *list) {
 
+    //To free all the nodes in the list we use 2 pointers.
+    //cur will be used to traverse the list while head will be used to free the block of memory we
+    StudentNode *cur = list->head;
+    StudentNode *head=cur;
+    while(cur!=NULL){
+        cur=cur->next;
+        free(head);
+        head=cur;
+    }
+
 }
 
 void printStudentNode(StudentNode *const node) {
+//We the print the StudentNode details by accessing all the data members of the node.
+    printf("Student of ID: %d, Grade1: %d, Grade2: %d\n",node->st->id,node->st->grade1,node->st->grade2);
 
 }
 
 void printStudentList(StudentList *const list) {
 
-    FILE *f = fopen("C:\\Users\\chris\\CLionProjects\\Ex4\\StudentsGrades.txt", "r+");
-    if (f == NULL) {
-        printf("No file found.\n");
-        return;
+    //cur will point to the head of the linked list
+    StudentNode *cur=list->head;
+    //counter will be used how many students we traverse through.
+    int counter=1;
+    //while loop to traverse all the studentlist nodes and printing each student's details.
+    while(cur!=NULL){
+        printf("Student %d ID: %d, Grade1: %d, Grade2: %d\n",counter++,cur->st->id,cur->st->grade1,cur->st->grade2);
+        cur=cur->next;
     }
-    int id, grade1, grade2;
-    while (!feof(f)) {
-        fscanf(f, "%d %d %d", &id, &grade1, &grade2);
-        printf("ID: %d, grade1: %d, grade2, %d\n", id, grade1, grade2);
-    }
-    fclose(f);
+
 }
 
 void addToList(StudentList *list, Student *std) {
 
-    FILE *f = fopen("C:\\Users\\chris\\CLionProjects\\Ex4\\StudentsGrades.txt", "r+");
-    int total = 0, only1 = 0, none = 0;
-    int id, grade1, grade2;
-    double passed1=0,passed2=0;
-    while (!feof(f)) {
-        fscanf(f, "%d %d %d", &id, &grade1, &grade2);
-        total++;
-        if(grade1==-1&&grade2==-1)
-            none++;
-        else if((grade1==-1&&grade2!=-1) ||(grade1!=-1&&grade2==-1))
-            only1++;
-        if(grade1>=60)
-            passed1++;
-        if(grade2>=60)
-            passed2++;
+    //Cur points to head of list.
+    StudentNode *cur=list->head;
+    //while loop to find next free spot, once cur's next pointer points to NULL we exit
+    while(cur->next!=NULL){
+        cur=cur->next;
     }
-    fclose(f);
-
-    f = fopen("C:\\Users\\chris\\CLionProjects\\Ex4\\Report.txt","w+");
-
-
-    fprintf(f,"Number of students in file: %d\n",total);
-    fprintf(f,"Number of students who did only one test: %d\n",only1);
-    fprintf(f,"Number of students who did neither tests: %d",none);
-
-
+    //we create a new student node at cur's next pointer
+    cur->next = (StudentNode *) calloc(1, sizeof(StudentNode));
+    //cur moves to next node.
+    cur=cur->next;
+    //cur's student pointer will point to received student address
+    cur->st=std;
 
 }
