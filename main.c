@@ -6,12 +6,23 @@
 int main() {
 
     StudentList *List = createList();
-    StudentNode *head  = calloc(1, sizeof(StudentNode));
-    List->head=head;
-    head->st = (Student *) calloc(1, sizeof(Student));
-    FILE *f = fopen("C:\\Users\\chris\\CLionProjects\\Ex4\\StudentsGrades.txt", "r+");
-    fscanf(f,"%d %d %d",&(head->st->id),&(head->st->grade1),&(head->st->grade2));
-    printf("%d %d %d",head->st->id,head->st->grade1,head->st->grade2);
-
+    StudentNode *node=List->head;
+    while(node!=NULL){
+        printStudentNode(node);
+        node=node->next;
+    }
+    printf("\n");
+    deleteList(List);
+    node=List->head;
+    if(List!=NULL)
+        printf("not empty!\n");
+int counter=0;
+    while(node!=NULL){
+        printStudentNode(node);
+        node=node->next;
+        counter++;
+        if(counter==20)
+            break;
+    }
     return 0;
 }
