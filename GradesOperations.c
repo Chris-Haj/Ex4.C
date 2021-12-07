@@ -1,14 +1,16 @@
 #include "GradesOperations.h"
 
 
-void createReport() {
+void createReport(StudentList **list) {
 
-    FILE *f = fopen("C:\\Users\\chris\\CLionProjects\\Ex4\\StudentsGrades.txt", "r+");
+    FILE *f = fopen("//home//chris//CLionProjects//Ex4.C//StudentsGrades.txt", "r+");
     int total = 0, only1 = 0, none = 0, max=0, min=100,maxID=0,minID=0;
     int id, grade1, grade2;
     double failed1 = 0, failed2 = 0;
+    Student *cur=NULL;
     //a while loop to read from the file line by line and store the first, second and third integers we find into id, grade1, grade2 by the same order.
     while (!feof(f)) {
+
         fscanf(f, "%d %d %d", &id, &grade1, &grade2);
         //total is used to tell how many students are in the file, each time we take a new line (new student) total increments by 1.
         total++;
@@ -34,9 +36,14 @@ void createReport() {
         //If a student got less than 60 on the second exam, failed2 increments by 1.
         if (grade2 < 60)
             failed2++;
+        cur= calloc(1, sizeof(Student));
+        cur->id=id;
+        cur->grade1=grade1;
+        cur->grade2=grade2;
+        addToList(*list,cur);
     }
     fclose(f);
-    f = fopen("C:\\Users\\chris\\CLionProjects\\Ex4\\Report.txt", "w+");
+    f = fopen("//home//chris//CLionProjects//Ex4.C//Report.txt", "w+");
     //failed1 and failed2 are divided by the total amount of students and multiplied by 100 to get the percentage of failures in the test
     failed1/=total,failed2/=total;
     failed1*=100,failed2*=100;

@@ -2,27 +2,22 @@
 #include "StudentList.h"
 #include "GradesOperations.h"
 
+void change(int *x);
 
 int main() {
 
     StudentList *List = createList();
-    StudentNode *node=List->head;
-    while(node!=NULL){
-        printStudentNode(node);
-        node=node->next;
-    }
-    printf("\n");
+    createReport(&List);
+    printStudentList(List);
+    free(List);
+    List=NULL;
     deleteList(List);
-    node=List->head;
-    if(List!=NULL)
-        printf("not empty!\n");
-int counter=0;
-    while(node!=NULL){
-        printStudentNode(node);
-        node=node->next;
-        counter++;
-        if(counter==20)
-            break;
-    }
+    printStudentList(List);
+
     return 0;
 }
+
+void change(int *x){
+    *x+=10;
+}
+

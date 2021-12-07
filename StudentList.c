@@ -3,39 +3,28 @@
 StudentList *createList() {
 // We create a StudentList using calloc, and intialize its head to null then return the list.
     StudentList *List = (StudentList *) calloc(1, sizeof(StudentList));
-    List->head= calloc(1, sizeof(StudentNode));
-    StudentNode *cur=List->head;
-    int id,g1,g2;
-    FILE *f= fopen("C:\\Users\\chris\\CLionProjects\\Ex4\\StudentsGrades.txt","r");
-    while(!feof(f)){
-        fscanf(f,"%d %d %d",&id,&g1,&g2);
-        cur->st= calloc(1, sizeof(Student));
-        cur->st->id=id;
-        cur->st->grade1=g1;
-        cur->st->grade2=g2;
-        if(feof(f)){
-            cur->next=NULL;
-            break;
-        }
-        cur->next= calloc(1, sizeof(StudentNode));
-        cur=cur->next;
-    }
+    List->head=NULL;
     return List;
 }
+
+
 
 void deleteList(StudentList *list) {
 
     //To free all the nodes in the list we use 2 pointers.
     //cur will be used to traverse the list while head will be used to free the block of memory we
-    if(list==NULL)
+    if(list==NULL||list->head==NULL)
         return;
-    if(list->head==NULL){
-        free(list);
-        list=NULL;
-    }
+
     StudentNode *cur=list->head;
     StudentNode *delete=cur;
-    while(cur)
+    while(cur!=NULL){
+        cur=cur->next;
+        free(delete);
+        delete=NULL;
+        delete=cur;
+    }
+    list->head=NULL;
 }
 
 void printStudentNode(StudentNode *const node) {
@@ -48,12 +37,16 @@ void printStudentNode(StudentNode *const node) {
 void printStudentList(StudentList *const list) {
 
     //cur will point to the head of the linked list
+    if(list==NULL||list->head==NULL){
+        printf("List is empty!\n");
+        return;
+    }
     StudentNode *cur=list->head;
     //counter will be used how many students we traverse through.
     int counter=1;
     //while loop to traverse all the studentlist nodes and printing each student's details.
     while(cur!=NULL){
-        printf("Student %d ID: %d, Grade1: %d, Grade2: %d\n",counter++,cur->st->id,cur->st->grade1,cur->st->grade2);
+        printStudentNode(cur);
         cur=cur->next;
     }
 
@@ -62,6 +55,11 @@ void printStudentList(StudentList *const list) {
 void addToList(StudentList *list, Student *std) {
 
     //Cur points to head of list.
+    if(list->head==NULL){
+        list->head= calloc(1, sizeof(StudentNode));
+        list->head->st=std;
+        return;
+    }
     StudentNode *cur=list->head;
     //while loop to find next free spot, once cur's next pointer points to NULL we exit
     while(cur->next!=NULL){
